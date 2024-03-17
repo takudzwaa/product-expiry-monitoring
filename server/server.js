@@ -2,7 +2,9 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
-import productsRouter from './routes/products'; // Import the productsRouter
+import productsRouter from './routes/products';
+import express from 'express';
+import session from 'express-session';
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -16,6 +18,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error('Error connecting to MongoDB:', err.message);
 });
 
+
 const app = express(); 
 
 app.use(express.json());
@@ -28,3 +31,12 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Configure session middleware
+app.use(session({
+  secret: 'uihuiiua$@#hi83998h27hiay3!!h4$suib8&huhsqqpk3nvmz>j', 
+  resave: false,
+  saveUninitialized: false
+}));
+
+// Other middleware and route setup...
