@@ -1,3 +1,5 @@
+// App.js
+
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
@@ -9,6 +11,7 @@ function App() {
       <Switch>
         <Route path="/" exact component={LoginPage} />
         <Route path="/dashboard" component={Dashboard} />
+
       </Switch>
     </BrowserRouter>
   );

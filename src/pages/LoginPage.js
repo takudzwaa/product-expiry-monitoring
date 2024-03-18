@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import './LoginPage.css'; // Import the CSS file
+import './LoginPage.css'; 
+import { useHistory } from 'react-router-dom';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const history = useHistory();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -20,6 +22,7 @@ const LoginPage = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Login successful:', data);
+        history.push('/dashboard');
       } else {
         console.log('Login failed:', response.status);
       }
