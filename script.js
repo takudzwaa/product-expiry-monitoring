@@ -1,25 +1,35 @@
+// Function to extract importance and urgency from task name
+function extractPriority(taskName) {
+    // Placeholder NLP processing
+    if (taskName.toLowerCase().includes('urgent')) {
+        return { importance: 'High', urgency: 'High' };
+    } else if (taskName.toLowerCase().includes('important')) {
+        return { importance: 'High', urgency: 'Medium' };
+    } else {
+        return { importance: 'Medium', urgency: 'Low' };
+    }
+}
+
 // Function to fetch tasks from the backend and display them on the page
 function fetchTasks() {
-    // Call a backend function to retrieve tasks (we'll implement this later)
-    // For now, let's simulate some dummy tasks
-    const tasks = [
-        { id: 1, name: "Task 1", due_date: "2024-03-26" },
-        { id: 2, name: "Task 2", due_date: "2024-03-27" },
-        { id: 3, name: "Task 3", due_date: "2024-03-28" }
-    ];
+    fetch('/get_tasks')  // Send a GET request to /get_tasks endpoint
+        .then(response => response.json())  // Parse the JSON response
+        .then(tasks => {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";  // Clear existing tasks
 
-    const taskList = document.getElementById("taskList");
+            tasks.forEach(task => {
+                const taskElement = document.createElement("div");
+                taskElement.classList.add("task");
 
-    // Clear existing tasks
-    taskList.innerHTML = "";
+                // Extract importance and urgency from task name
+                const { importance, urgency } = extractPriority(task.name);
 
-    // Add each task to the taskList container
-    tasks.forEach(task => {
-        const taskElement = document.createElement("div");
-        taskElement.classList.add("task");
-        taskElement.innerHTML = `<strong>${task.name}</strong> - Due Date: ${task.due_date}`;
-        taskList.appendChild(taskElement);
-    });
+                taskElement.innerHTML = `<strong>${task.name}</strong> - Due Date: ${task.due_date} - Importance: ${importance}, Urgency: ${urgency}`;
+                taskList.appendChild(taskElement);
+            });
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
 }
 
 // Event listener for form submission
@@ -30,16 +40,27 @@ document.getElementById("taskForm").addEventListener("submit", function(event) {
     const taskName = document.getElementById("taskName").value;
     const dueDate = document.getElementById("dueDate").value;
 
-    // Call a backend function to add the task (we'll implement this later)
-    // For now, let's log the task details
-    console.log("New Task:", taskName, "Due Date:", dueDate);
-
-    // Clear form fields
-    document.getElementById("taskName").value = "";
-    document.getElementById("dueDate").value = "";
-
-    // Refresh task list
-    fetchTasks();
+    // Send a POST request to /add_task endpoint to add the task
+    fetch('/add_task', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: taskName, due_date: dueDate }),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Task added successfully!");
+            // Clear form fields
+            document.getElementById("taskName").value = "";
+            document.getElementById("dueDate").value = "";
+            // Refresh task list
+            fetchTasks();
+        } else {
+            throw new Error('Failed to add task');
+        }
+    })
+    .catch(error => console.error('Error adding task:', error));
 });
 
 // Fetch tasks when the page loads
