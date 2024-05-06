@@ -6,10 +6,11 @@ test('renders learn react link', () => {
   const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react'; // Remove duplicate import statement
 import { BrowserRouter } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
 import App from './App';
+import Login from './Login';
 import LoginPage from './LoginPage';
 import Dashboard from './Dashboard';
 
@@ -19,6 +20,7 @@ test('renders learn react link', () => {
       <Routes>
         <Route path="/" exact component={LoginPage} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/login" component={Login} />
       </Routes>
     </BrowserRouter>
   );
@@ -33,6 +35,7 @@ test('renders LoginPage component', () => {
       <Routes>
         <Route path="/" exact component={LoginPage} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/login" component={Login} />
       </Routes>
     </BrowserRouter>
   );
@@ -47,6 +50,19 @@ test('renders Dashboard component', () => {
       <Routes>
         <Route path="/" exact component={LoginPage} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/login" component={Login} />
+      </Routes>
+    </BrowserRouter>
+  );
+});
+
+test('renders Login component', () => {
+  render(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" exact component={LoginPage} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/login" component={Login} />
       </Routes>
     </BrowserRouter>
   );

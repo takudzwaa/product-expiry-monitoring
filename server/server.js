@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
 import productsRouter from './routes/products';
-import express from 'express';
 import session from 'express-session';
 
 dotenv.config(); // Load environment variables from .env file
