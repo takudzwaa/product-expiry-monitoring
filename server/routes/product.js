@@ -30,6 +30,45 @@ router.post('/products', async (req, res) => {
   }
 });
 
+//Route to update a product
+router.patch('/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (req.body.batchNo) {
+      product.batchNo = req.body.batchNo;
+    }
+
+    if (req.body.name) {
+      product.name = req.body.name;
+    }
+
+    if (req.body.price) {
+      product.price = req.body.price;
+    }
+
+    if (req.body.expiryDate) {
+      product.expiryDate = req.body.expiryDate;
+    }
+
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+
+  //route to delete a product
+  router.delete('/products/:id', async (req, res) => {
+    try {
+      const product = await Product.findById(req.params.id);
+      await product.remove();
+      res.json({ message: 'Product deleted successfully' });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+});
+
 export default router;
 
 
