@@ -20,14 +20,9 @@ app.use(session({
 }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch((err) => {
-  console.error('Error connecting to MongoDB:', err.message);
-});
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Database connected successfully'))
+    .catch(err => console.log(err));
 
 // Define routes
 app.use('/api/products', productRouter);
