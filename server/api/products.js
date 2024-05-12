@@ -1,45 +1,73 @@
-const express = require('express');
+import { findById, create, findByIdAndUpdate, findByIdAndDelete } from '../models/Product';
+import { Router } from 'express';
+const router = Router();
+export default router;
 
-const router = express.Router();
-
-// GET /api/products
-router.get('/', (req, res) => {
-    // Logic to fetch all products from the database
-    // ...
-    res.json(products);
-});
-
-// GET /api/products/:id
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     const productId = req.params.id;
-    // Logic to fetch a specific product by ID from the database
-    // ...
-    res.json(product);
-});
+    try {
+      // Use Mongoose to find the product by ID in the database
+      const product = await findById(productId);
+      if (!product) {
+        // If product not found, return 404 Not Found status
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      // If product found, send it as a JSON response
+      res.json(product);
+    } catch (error) {
+      // Handle any errors
+      console.error('Error fetching product by ID:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
-// POST /api/products
-router.post('/', (req, res) => {
+  router.post('/', async (req, res) => {
     const newProduct = req.body;
-    // Logic to create a new product in the database
-    // ...
-    res.json(createdProduct);
-});
+    try {
+      // Use Mongoose to create a new product in the database
+      const createdProduct = await create(newProduct);
+      // Send the created product as a JSON response
+      res.status(201).json(createdProduct);
+    } catch (error) {
+      // Handle any errors
+      console.error('Error creating product:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
-// PUT /api/products/:id
-router.put('/:id', (req, res) => {
+  router.put('/:id', async (req, res) => {
     const productId = req.params.id;
     const updatedProduct = req.body;
-    // Logic to update a specific product by ID in the database
-    // ...
-    res.json(updatedProduct);
-});
+    try {
+      // Use Mongoose to update the product by ID in the database
+      const product = await findByIdAndUpdate(productId, updatedProduct, { new: true });
+      if (!product) {
+        // If product not found, return 404 Not Found status
+        return res.status(404).json({ error: 'Product not found' });
+      }
+      // If product found and updated, send it as a JSON response
+      res.json(product);
+    } catch (error) {
+      // Handle any errors
+      console.error('Error updating product:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
-// DELETE /api/products/:id
-router.delete('/:id', (req, res) => {
-    const productId = req.params.id;
-    // Logic to delete a specific product by ID from the database
-    // ...
-    res.sendStatus(204);
-});
-
-module.exports = router;
+    router.delete('/:id', async (req, res) => {
+        const productId = req.params.id;
+        try {
+        // Use Mongoose to find and delete the product by ID in the database
+        const product = await findByIdAndDelete(productId);
+        if (!product) {
+            // If product not found, return 404 Not Found status
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        // If product found and deleted, send it as a JSON response
+        res.json(product);
+        } catch (error) {
+        // Handle any errors
+        console.error('Error deleting product:', error);
+        res.status(500).json({ error: 'Internal server error' });
+        }
+    });
