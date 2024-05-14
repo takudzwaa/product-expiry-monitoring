@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/products'; // replace with your API endpoint
+const API_URL = 'http://localhost:5000/api/products'; // API endpoint
 
 export async function createProduct(product) {
   const response = await axios.post(API_URL, product);

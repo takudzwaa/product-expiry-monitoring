@@ -12,7 +12,7 @@ router.get('/:id', async (req, res) => {
         // If product not found, return 404 Not Found status
         return res.status(404).json({ error: 'Product not found' });
       }
-      // If product found, send it as a JSON response
+      // If product  found, send it as a JSON response
       res.json(product);
     } catch (error) {
       // Handle any errors
