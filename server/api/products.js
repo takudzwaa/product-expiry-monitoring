@@ -6,7 +6,6 @@ export default router;
 router.get('/:id', async (req, res) => {
     const productId = req.params.id;
     try {
-      // Use Mongoose to find the product by ID in the database
       const product = await findById(productId);
       if (!product) {
         // If product not found, return 404 Not Found status
@@ -15,7 +14,6 @@ router.get('/:id', async (req, res) => {
       // If product found, send it as a JSON response
       res.json(product);
     } catch (error) {
-      // Handle any errors
       console.error('Error fetching product by ID:', error);
       res.status(500).json({ error: 'Internal server error' });
     }
@@ -24,7 +22,6 @@ router.get('/:id', async (req, res) => {
   router.post('/', async (req, res) => {
     const newProduct = req.body;
     try {
-      // Use Mongoose to create a new product in the database
       const createdProduct = await create(newProduct);
       // Send the created product as a JSON response
       res.status(201).json(createdProduct);

@@ -1,10 +1,9 @@
 import express from 'express';
 import Product from '../models/Product.js';
-
 const router = express.Router();
 
 // Route to get all products
-router.get('/products', async (req, res) => {
+router.get('/products', async (_req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
@@ -67,6 +66,43 @@ router.patch('/products/:id', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
+});
+
+// Fetch recent expired products
+router.get('/expired', async (_req, res) => {
+  const today = new Date();
+  try {
+    const expiredProducts = await Product.find({ expiryDate: { $lt: today } });
+    res.json(expiredProducts);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Fetch products that are about to expire
+router.get('/expiring-soon', async (_req, res) => {
+  const today = new Date();
+  const soon = new Date();
+  soon.setDate(today.getDate() + 30); // Products expiring in the next 30 days
+  try {
+    const expiringSoonProducts = await Product.find({
+      expiryDate: { $gte: today, $lt: soon }
+    });
+    res.json(expiringSoonProducts);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Fetch products that never expired
+router.get('/never-expired', async (_req, res) => {
+  const today = new Date();
+  try {
+    const neverExpiredProducts = await Product.find({ expiryDate: { $gte: today } });
+    res.json(neverExpiredProducts);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 export default router;
