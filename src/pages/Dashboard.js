@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
+import { CategoryScale, Chart } from "chart.js";
+
+Chart.register(CategoryScale);
 
 const Dashboard = () => {
   const [expiredProducts, setExpiredProducts] = useState([]);
